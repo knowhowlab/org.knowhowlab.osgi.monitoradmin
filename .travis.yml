@@ -1,7 +1,7 @@
 language: java
 script: mvn --quiet install -B -P it
 after_success:
-  - mvn clean test jacoco:report coveralls:report
+  - mvn clean cobertura:cobertura coveralls:report
 jdk:
   - openjdk6
   - oraclejdk7
