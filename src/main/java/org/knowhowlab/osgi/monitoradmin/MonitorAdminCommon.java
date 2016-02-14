@@ -380,7 +380,7 @@ class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor {
                 }
             }
         } finally {
-            logVisitor.debug("ENTRY: cancelJobs", null);
+            logVisitor.debug("EXIT: cancelJobs", null);
         }
     }
 
