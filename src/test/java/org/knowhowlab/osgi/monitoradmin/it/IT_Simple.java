@@ -38,7 +38,7 @@ public class IT_Simple {
     @Configuration
     public Option[] config() {
         return options(
-            systemPackages("javax.xml.parsers", "javax.net.ssl", "org.w3c.dom"),
+            systemPackages("javax.xml.parsers", "javax.net.ssl", "org.w3c.dom", "org.xml.sax"),
 
             mavenBundle().groupId("org.knowhowlab.osgi")
                 .artifactId("org.knowhowlab.osgi.testing.all")
