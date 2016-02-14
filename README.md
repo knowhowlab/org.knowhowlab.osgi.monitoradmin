@@ -1,7 +1,7 @@
 org.knowhowlab.osgi.monitoradmin
 ==========================
 
-119. OSGi Monitor Admin Service Implementation
+### 119. OSGi Monitor Admin Service Implementation. 
 
 [Javadoc](https://osgi.org/javadoc/r4v42/org/osgi/service/monitor/package-summary.html)
 
