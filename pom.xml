@@ -53,7 +53,7 @@
 
     <scm>
         <connection>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</connection>
-        <url>git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</url>
+        <url>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</url>
         <developerConnection>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
