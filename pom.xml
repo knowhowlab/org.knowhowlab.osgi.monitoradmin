@@ -25,7 +25,7 @@
     <groupId>org.knowhowlab.osgi</groupId>
     <artifactId>monitoradmin</artifactId>
     <version>1.0.3-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
 
     <name>OSGi MonitorAdmin Implementation</name>
     <description>OSGi MonitorAdmin API Implementation</description>
@@ -134,19 +134,12 @@
                 </executions>
                 <extensions>true</extensions>
                 <configuration>
-                    <supportedProjectTypes>
-                        <supportedProjectType>jar</supportedProjectType>
-                    </supportedProjectTypes>
                     <instructions>
-                        <Export-Package/>
-                        <Import-Package>
-                            org.osgi*,
-                            org.slf4j*
-                        </Import-Package>
+                        <Export-Package>org.osgi.service.monitor</Export-Package>
+                        <Private-Package>org.knowhowlab.osgi.monitoradmin.*</Private-Package>
                         <Bundle-Activator>org.knowhowlab.osgi.monitoradmin.Activator</Bundle-Activator>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>
-
                         <Bundle-RequiredExecutionEnvironment>J2SE-1.6</Bundle-RequiredExecutionEnvironment>
                         <_removeheaders>
                             Bnd-LastModified, Built-By, Private-Package, Tool, Build-Jdk, Include-Resource
