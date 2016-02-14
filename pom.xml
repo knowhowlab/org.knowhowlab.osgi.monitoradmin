@@ -23,7 +23,7 @@
 
     <groupId>org.knowhowlab.osgi</groupId>
     <artifactId>monitoradmin</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>OSGi MonitorAdmin Implementation</name>
@@ -54,7 +54,7 @@
         <connection>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</connection>
         <url>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</url>
         <developerConnection>scm:git:git@github.com:knowhowlab/org.knowhowlab.osgi.monitoradmin.git</developerConnection>
-        <tag>1.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <mailingLists>
