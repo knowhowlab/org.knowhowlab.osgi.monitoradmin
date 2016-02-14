@@ -38,6 +38,8 @@ public class IT_Simple {
     @Configuration
     public Option[] config() {
         return options(
+            systemPackages("javax.xml.parsers", "javax.net.ssl"),
+
             mavenBundle().groupId("org.knowhowlab.osgi")
                 .artifactId("org.knowhowlab.osgi.testing.all")
                 .version("1.3.0"),
