@@ -54,6 +54,7 @@ public class MonitorAdminImplTest {
 
     @After
     public void uninit() {
+        osgiVisitor.cleanPostedEvents();
         if (common != null) {
             common.cancelAllJobs();
         }
@@ -99,7 +100,7 @@ public class MonitorAdminImplTest {
     }
 
     @Test
-    public void testGetStatusVariable() throws Exception {
+    public void testGetStatusVariable_Valid() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
@@ -111,30 +112,6 @@ public class MonitorAdminImplTest {
         osgiVisitor.setReferences(map);
 
         MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
-
-        try {
-            monitorAdmin.getStatusVariable(null);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariable("/&%(/=");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariable("com.aaa/sv.id");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariable("com.acme.pid/sv.id_u");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
 
         StatusVariable sv = monitorAdmin.getStatusVariable("com.acme.pid/sv.id");
         Assert.assertNotNull(sv);
@@ -142,11 +119,52 @@ public class MonitorAdminImplTest {
         Assert.assertEquals(StatusVariable.CM_CC, sv.getCollectionMethod());
         Assert.assertEquals(StatusVariable.TYPE_INTEGER, sv.getType());
         Assert.assertEquals(0, sv.getInteger());
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariable_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableTests();
+
+        monitorAdmin.getStatusVariable(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariable_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableTests();
+
+        monitorAdmin.getStatusVariable("/&%(/=");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariable_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableTests();
+
+        monitorAdmin.getStatusVariable("com.aaa/sv.id");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariable_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableTests();
+
+        monitorAdmin.getStatusVariable("com.acme.pid/sv.id_u");
+    }
+
+    private MonitorAdmin prepareMonitorAdminForGetStatusVariableTests() {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {new StatusVariable("sv.id", StatusVariable.CM_CC, 0)};
+        monitorable.setStatusVariables(statusVariables);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
     }
 
     @Test
-    public void testGetDescription() throws Exception {
+    public void testGetDescription_Valid() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
@@ -159,44 +177,62 @@ public class MonitorAdminImplTest {
 
         MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
 
-        try {
-            monitorAdmin.getDescription(null);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getDescription("/&%(/=");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getDescription("com.aaa/sv.id");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getDescription("com.acme.pid/sv.id_u");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
         String description = monitorAdmin.getDescription("com.acme.pid/sv.id");
         Assert.assertNotNull(description);
         Assert.assertEquals("sv.id", description);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescription_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetDescriptionTests();
+
+        monitorAdmin.getDescription(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescription_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetDescriptionTests();
+
+        monitorAdmin.getDescription("/&%(/=");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescription_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetDescriptionTests();
+
+        monitorAdmin.getDescription("com.aaa/sv.id");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetDescription_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetDescriptionTests();
+
+        monitorAdmin.getDescription("com.acme.pid/sv.id_u");
+    }
+
+    private MonitorAdmin prepareMonitorAdminForGetDescriptionTests() {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {new StatusVariable("sv.id", StatusVariable.CM_CC, 0)};
+        monitorable.setStatusVariables(statusVariables);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
+    }
+
     @Test
-    public void testGetStatusVariables() throws Exception {
+    public void testGetStatusVariables_Valid() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
 
@@ -204,24 +240,6 @@ public class MonitorAdminImplTest {
         osgiVisitor.setReferences(map);
 
         MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
-
-        try {
-            monitorAdmin.getStatusVariables(null);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariables("/&%(/=");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariables("com.aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
 
         StatusVariable[] variables = monitorAdmin.getStatusVariables("com.acme.pid");
         Assert.assertNotNull(variables);
@@ -230,15 +248,53 @@ public class MonitorAdminImplTest {
         Assert.assertTrue("sv.id2".equals(variables[1].getID()));
     }
 
-    @Test
-    public void testGetStatusVariableNames() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariables_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariablesTests();
+
+        monitorAdmin.getStatusVariables(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariables_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariablesTests();
+
+        monitorAdmin.getStatusVariables("/&%(/=");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariables_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariablesTests();
+
+        monitorAdmin.getStatusVariables("com.aaa");
+    }
+
+    private MonitorAdmin prepareMonitorAdminForGetStatusVariablesTests() {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+        };
+        monitorable.setStatusVariables(statusVariables);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
+    }
+
+    @Test
+    public void testGetStatusVariableNames_Valid() throws Exception {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
 
@@ -247,29 +303,49 @@ public class MonitorAdminImplTest {
 
         MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
 
-        try {
-            monitorAdmin.getStatusVariableNames(null);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariableNames("/&%(/=");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.getStatusVariableNames("com.aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
         String[] names = monitorAdmin.getStatusVariableNames("com.acme.pid");
         Assert.assertNotNull(names);
         Assert.assertEquals(2, names.length);
         Assert.assertTrue("sv.id1".equals(names[0]));
         Assert.assertTrue("sv.id2".equals(names[1]));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariableNames_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableNamesTests();
+
+        monitorAdmin.getStatusVariableNames(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariableNames_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableNamesTests();
+
+        monitorAdmin.getStatusVariableNames("/&%(/=");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetStatusVariableNames_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForGetStatusVariableNamesTests();
+
+        monitorAdmin.getStatusVariableNames("com.aaa");
+    }
+
+    private MonitorAdmin prepareMonitorAdminForGetStatusVariableNamesTests() {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+        };
+        monitorable.setStatusVariables(statusVariables);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
     }
 
     @Test
@@ -279,8 +355,8 @@ public class MonitorAdminImplTest {
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
         monitorable.setNotificationSupport("sv.id1", true);
@@ -309,14 +385,14 @@ public class MonitorAdminImplTest {
     }
 
     @Test
-    public void testResetStatusVariable() throws Exception {
+    public void testResetStatusVariable_Valid() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
         monitorable.setNotificationSupport("sv.id1", true);
@@ -336,30 +412,6 @@ public class MonitorAdminImplTest {
         Assert.assertNotNull(sv);
         Assert.assertEquals(15, sv.getInteger());
 
-        try {
-            monitorAdmin.resetStatusVariable(null);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.resetStatusVariable("/&%(/=");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.resetStatusVariable("com.aaa/sv.id");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.resetStatusVariable("com.acme.pid/sv.id_u");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
         boolean result = monitorAdmin.resetStatusVariable("com.acme.pid/sv.id1");
         Assert.assertTrue(result);
 
@@ -368,14 +420,60 @@ public class MonitorAdminImplTest {
         Assert.assertEquals(0, sv.getInteger());
     }
 
-    @Test
-    public void testSwitchEvents() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void testResetStatusVariable_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForResetStatusVariableTests();
+
+        monitorAdmin.resetStatusVariable(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testResetStatusVariable_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForResetStatusVariableTests();
+
+        monitorAdmin.resetStatusVariable("/&%(/=");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testResetStatusVariable_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForResetStatusVariableTests();
+
+        monitorAdmin.resetStatusVariable("com.aaa/sv.id");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testResetStatusVariable_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForResetStatusVariableTests();
+
+        monitorAdmin.resetStatusVariable("com.acme.pid/sv.id_u");
+    }
+
+    private MonitorAdmin prepareMonitorAdminForResetStatusVariableTests() {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+        };
+        monitorable.setStatusVariables(statusVariables);
+        monitorable.setNotificationSupport("sv.id1", true);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
+    }
+
+    @Test
+    public void testSwitchEvents_Valid() throws Exception {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
         };
         monitorable.setStatusVariables(statusVariables);
         monitorable.setNotificationSupport("sv.id1", true);
@@ -384,43 +482,6 @@ public class MonitorAdminImplTest {
         osgiVisitor.setReferences(map);
 
         MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
-
-        try {
-            monitorAdmin.switchEvents(null, true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            monitorAdmin.switchEvents("/&%(/=", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            monitorAdmin.switchEvents("com.aaa/sv.id1", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            monitorAdmin.switchEvents("com.acme.pid/sv.id_u", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.switchEvents("*", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            monitorAdmin.switchEvents("**", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            monitorAdmin.switchEvents("**/*", true);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
 
         monitorAdmin.switchEvents("com.acme.pid/sv.id1", false);
 
@@ -443,6 +504,72 @@ public class MonitorAdminImplTest {
         Assert.assertEquals(0, paths.length);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents(null, true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("/&%(/=", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("com.aaa/sv.id1", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("com.acme.pid/sv.id_u", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid5() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("*", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid6() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("**", true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSwitchEvents_Invalid7() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForSwitchEventsTests();
+
+        monitorAdmin.switchEvents("**/*", true);
+    }
+
+    private MonitorAdmin prepareMonitorAdminForSwitchEventsTests() {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+        };
+        monitorable.setStatusVariables(statusVariables);
+        monitorable.setNotificationSupport("sv.id1", true);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
+    }
+
     @Test
     public void testSwitchEventsWithNotification() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
@@ -450,8 +577,8 @@ public class MonitorAdminImplTest {
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
         monitorable.setNotificationSupport("sv.id1", true);
@@ -493,14 +620,14 @@ public class MonitorAdminImplTest {
     }
 
     @Test
-    public void testStartJob() throws Exception {
+    public void testStartJob_Valid() throws Exception {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
         monitorable.setNotificationSupport("sv.id1", true);
@@ -512,36 +639,6 @@ public class MonitorAdminImplTest {
 
         monitorable.setListener(common);
         monitorable.setMonitorableId("com.acme.pid");
-
-        try {
-            monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id11"}, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id2"}, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startJob(null, new String[]{"com.acme.pid/sv.id2"}, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startJob("init1", new String[]{"com.acme.pid1/sv.id1"}, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id1"}, -1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
 
         MonitoringJob job = monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id1"}, 1);
 
@@ -581,15 +678,68 @@ public class MonitorAdminImplTest {
         Assert.assertNull(events[0].getProperty(ConstantsMonitorAdmin.MON_LISTENER_ID));
     }
 
-    @Test
-    public void testStartScheduledJob() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartJob_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartJobTests();
+
+        monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id11"}, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartJob_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartJobTests();
+
+        monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id2"}, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartJob_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartJobTests();
+
+        monitorAdmin.startJob(null, new String[]{"com.acme.pid/sv.id2"}, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartJob_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartJobTests();
+
+        monitorAdmin.startJob("init1", new String[]{"com.acme.pid1/sv.id1"}, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartJob_Invalid5() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartJobTests();
+
+        monitorAdmin.startJob("init1", new String[]{"com.acme.pid/sv.id1"}, -1);
+    }
+
+    private MonitorAdmin prepareMonitorAdminForStartJobTests() {
         HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
 
         MockMonitorable monitorable = new MockMonitorable();
 
         StatusVariable[] statusVariables = {
-                new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
-                new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+        };
+        monitorable.setStatusVariables(statusVariables);
+        monitorable.setNotificationSupport("sv.id1", true);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        return new MonitorAdminImpl(logVisitor, common, bundle);
+    }
+
+    @Test
+    public void testStartScheduledJob_Valid() throws Exception {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
         };
         monitorable.setStatusVariables(statusVariables);
 
@@ -603,42 +753,12 @@ public class MonitorAdminImplTest {
 
         monitorable.setNewStatusVariableValue("sv.id1", "15");
 
-        try {
-            monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id11"}, 1, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid1/sv.id1"}, 1, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startScheduledJob(null, new String[]{"com.acme.pid1/sv.id1"}, 1, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, -1, 1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, 1, -1);
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
-
-        MonitoringJob job = monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, 5, 0);
+        MonitoringJob job = monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, 2, 0);
 
         MonitoringJob[] jobs = monitorAdmin.getRunningJobs();
         Assert.assertEquals(1, jobs.length);
 
-        TimeUnit.SECONDS.sleep(7);
+        TimeUnit.SECONDS.sleep(3);
 
         Event[] events = osgiVisitor.getPostedEvents();
         Assert.assertEquals(2, events.length);
@@ -658,5 +778,63 @@ public class MonitorAdminImplTest {
 
         events = osgiVisitor.getPostedEvents();
         Assert.assertEquals(0, events.length);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartScheduledJob_Invalid1() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartScheduledJobTests();
+
+        monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id11"}, 1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartScheduledJob_Invalid2() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartScheduledJobTests();
+
+        monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid1/sv.id1"}, 1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartScheduledJob_Invalid3() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartScheduledJobTests();
+
+        monitorAdmin.startScheduledJob(null, new String[]{"com.acme.pid1/sv.id1"}, 1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartScheduledJob_Invalid4() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartScheduledJobTests();
+
+        monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, -1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testStartScheduledJob_Invalid5() throws Exception {
+        MonitorAdmin monitorAdmin = prepareMonitorAdminForStartScheduledJobTests();
+
+        monitorAdmin.startScheduledJob("init1", new String[]{"com.acme.pid/sv.id1"}, 1, -1);
+    }
+
+    private MonitorAdmin prepareMonitorAdminForStartScheduledJobTests() {
+        HashMap<ServiceReference, Monitorable> map = new HashMap<ServiceReference, Monitorable>();
+
+        MockMonitorable monitorable = new MockMonitorable();
+
+        StatusVariable[] statusVariables = {
+            new StatusVariable("sv.id1", StatusVariable.CM_CC, 0),
+            new StatusVariable("sv.id2", StatusVariable.CM_CC, "test")
+        };
+        monitorable.setStatusVariables(statusVariables);
+
+        map.put(new MonitorableMockServiceReference("com.acme.pid"), monitorable);
+        osgiVisitor.setReferences(map);
+
+        MonitorAdmin monitorAdmin = new MonitorAdminImpl(logVisitor, common, bundle);
+
+        monitorable.setListener(common);
+        monitorable.setMonitorableId("com.acme.pid");
+
+        monitorable.setNewStatusVariableValue("sv.id1", "15");
+        return monitorAdmin;
     }
 }

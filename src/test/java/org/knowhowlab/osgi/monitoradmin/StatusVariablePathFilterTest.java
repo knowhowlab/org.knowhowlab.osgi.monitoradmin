@@ -26,31 +26,31 @@ import org.knowhowlab.osgi.monitoradmin.util.StatusVariablePathFilter;
  */
 public class StatusVariablePathFilterTest {
     @Test
-    public void testParse() {
+    public void testParse_ValidFilter1() {
         StatusVariablePathFilter filter = new StatusVariablePathFilter("aaa.*/aaa.aaa.*");
         Assert.assertEquals("aaa.", filter.getMonitorableId());
         Assert.assertEquals("aaa.aaa.", filter.getStatusVariableId());
+    }
 
-        filter = new StatusVariablePathFilter("*/*");
+    @Test
+    public void testParse_ValidFilter2() {
+        StatusVariablePathFilter filter = new StatusVariablePathFilter("*/*");
         Assert.assertEquals("", filter.getMonitorableId());
         Assert.assertEquals("", filter.getStatusVariableId());
+    }
 
-        try {
-            new StatusVariablePathFilter("aaa/aaa/aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidFilter1() {
+        new StatusVariablePathFilter("aaa/aaa/aaa");
+    }
 
-        try {
-            new StatusVariablePathFilter("/aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidFilter2() {
+        new StatusVariablePathFilter("/aaa");
+    }
 
-        try {
-            new StatusVariablePathFilter("aaa*.aaa./aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidFilter3() {
+        new StatusVariablePathFilter("aaa*.aaa./aaa");
     }
 }

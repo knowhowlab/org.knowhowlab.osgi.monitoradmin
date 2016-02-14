@@ -26,27 +26,24 @@ import org.knowhowlab.osgi.monitoradmin.util.StatusVariablePath;
  */
 public class StatusVariablePathTest {
     @Test
-    public void testParse() {
+    public void testParse_ValidPath() {
         StatusVariablePath path = new StatusVariablePath("aaa/aaa");
         Assert.assertEquals("aaa", path.getMonitorableId());
         Assert.assertEquals("aaa", path.getStatusVariableId());
+    }
 
-        try {
-            new StatusVariablePath("aaa/aaa/aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidPath1() {
+        new StatusVariablePath("aaa/aaa/aaa");
+    }
 
-        try {
-            new StatusVariablePath("/aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidPath2() {
+        new StatusVariablePath("/aaa");
+    }
 
-        try {
-            new StatusVariablePath("aaa.aaa./aaa");
-            Assert.fail();
-        } catch (IllegalArgumentException e) {
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testParse_InvalidPath3() {
+        new StatusVariablePath("aaa.aaa./aaa");
     }
 }
