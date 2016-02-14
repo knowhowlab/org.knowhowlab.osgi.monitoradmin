@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.security.Permission;
 public class NonePermission extends Permission {
     public static final NonePermission INSTANCE = new NonePermission();
 
-    public NonePermission() {
+    private NonePermission() {
         super("<no permissions>");
     }
 

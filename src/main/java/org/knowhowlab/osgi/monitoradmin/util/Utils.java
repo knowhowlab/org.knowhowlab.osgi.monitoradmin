@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package org.knowhowlab.osgi.monitoradmin.util;
 import org.osgi.framework.Constants;
 
 import java.util.regex.Pattern;
+
+import static java.lang.String.format;
 
 /**
  * Utils class
@@ -42,13 +44,7 @@ public class Utils {
      * @return filter
      */
     public static String createServicePidFilter(String monitorableId) {
-        StringBuilder builder = new StringBuilder();
-        builder.append('(');
-        builder.append(Constants.SERVICE_PID);
-        builder.append('=');
-        builder.append(monitorableId);
-        builder.append(')');
-        return builder.toString();
+        return format("(%s=%s)", Constants.SERVICE_PID, monitorableId);
     }
 
     /**
@@ -65,7 +61,7 @@ public class Utils {
      * @param id id
      * @return validation result
      */
-    public static boolean validatePathFilterId(String id) {
+    static boolean validatePathFilterId(String id) {
         return FILTER_ID_VALIDATE_PATTERN.matcher(id).matches();
     }
 }

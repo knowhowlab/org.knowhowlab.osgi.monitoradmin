@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ package org.knowhowlab.osgi.monitoradmin.util;
  */
 public class StatusVariablePath {
     protected String monitorableId;
-    protected String statusVariableId;
+    String statusVariableId;
     protected String path;
 
     /**
@@ -103,7 +103,7 @@ public class StatusVariablePath {
      * @throws IllegalArgumentException path is <code>null</code> or invalid
      *                                  (contains more or less than one separator '/' or parsed IDs are empty or invalid)
      */
-    protected String[] parseIds(String path) throws IllegalArgumentException {
+    String[] parseIds(String path) throws IllegalArgumentException {
         if (path == null) {
             throw new IllegalArgumentException("Path is null");
         }

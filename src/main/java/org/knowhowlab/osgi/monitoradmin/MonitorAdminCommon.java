@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +37,14 @@ import java.util.*;
  *
  * @author dpishchukhin
  */
-public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor {
+class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor {
     private static final String SYMBOLIC_NAME_CHARACTERS =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
                     "-_.";   // a subset of the characters allowed in DMT URIs
 
     private static final int MAX_ID_LENGTH = 32;
 
-    public static final String PATH_PATERN = "%s/%s";
+    static final String PATH_PATTERN = "%s/%s";
 
     /**
      * Set of StatusVariable paths for which events are disabled
@@ -58,7 +58,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
     private final OsgiVisitor osgiVisitor;
     private final LogVisitor logVisitor;
 
-    public MonitorAdminCommon(OsgiVisitor osgiVisitor, LogVisitor logVisitor) {
+    MonitorAdminCommon(OsgiVisitor osgiVisitor, LogVisitor logVisitor) {
         this.osgiVisitor = osgiVisitor;
         this.logVisitor = logVisitor;
     }
@@ -103,7 +103,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *
      * @return array with StatusVariable paths
      */
-    public String[] getDisabledNotificationPaths() {
+    String[] getDisabledNotificationPaths() {
         return disabledPaths.toArray(new String[disabledPaths.size()]);
     }
 
@@ -173,7 +173,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      * @throws IllegalArgumentException monitorableId is <code>null</code> or monitorableId points
      *                                  to non-existing service or monitorableId is invalid
      */
-    public ServiceReference findMonitorableReferenceById(String monitorableId) throws IllegalArgumentException {
+    ServiceReference findMonitorableReferenceById(String monitorableId) throws IllegalArgumentException {
         if (monitorableId == null) {
             throw new IllegalArgumentException("MonitorableId is null");
         }
@@ -209,7 +209,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *
      * @return the array of <code>Monitorable</code> names
      */
-    public ServiceReference[] getMonitorableReferences() {
+    ServiceReference[] getMonitorableReferences() {
         return getMonitorableReferences(null);
     }
 
@@ -224,7 +224,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      * @param monitorableIdFilter <code>Monitorable</code> SERVICE_PID filter
      * @return the array of <code>Monitorable</code> names
      */
-    public ServiceReference[] getMonitorableReferences(String monitorableIdFilter) {
+    ServiceReference[] getMonitorableReferences(String monitorableIdFilter) {
         // sorted set that contains Monitorable ServiceReferences
         SortedSet<ServiceReference> names = new TreeSet<ServiceReference>(new ServiceReferencePidComparator());
         ServiceReference[] serviceReferences = osgiVisitor.findMonitorableReferences(monitorableIdFilter);
@@ -244,7 +244,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *
      * @param job MonitoringJob
      */
-    public void addJob(AbstractMonitoringJob job) {
+    void addJob(AbstractMonitoringJob job) {
         synchronized (jobs) {
             jobs.add(job);
         }
@@ -255,7 +255,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *
      * @return list of running jobs
      */
-    public List<MonitoringJob> getRunningJobs() {
+    List<MonitoringJob> getRunningJobs() {
         List<MonitoringJob> runningJobs = new ArrayList<MonitoringJob>();
         synchronized (jobs) {
             for (AbstractMonitoringJob job : jobs) {
@@ -301,7 +301,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *          if points to a
      *          non-existing <code>StatusVariable</code>
      */
-    public StatusVariable getStatusVariable(ServiceReference serviceReference, String statusVariableId) {
+    StatusVariable getStatusVariable(ServiceReference serviceReference, String statusVariableId) {
         return osgiVisitor.getService(serviceReference).getStatusVariable(statusVariableId);
     }
 
@@ -316,7 +316,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *          if points to a
      *          non-existing <code>StatusVariable</code>
      */
-    public String getDescription(ServiceReference serviceReference, String statusVariableId) {
+    String getDescription(ServiceReference serviceReference, String statusVariableId) {
         return osgiVisitor.getService(serviceReference).getDescription(statusVariableId);
     }
 
@@ -331,7 +331,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *          if points to a
      *          non-existing <code>StatusVariable</code>
      */
-    public boolean notifiesOnChange(ServiceReference serviceReference, String statusVariableId) {
+    boolean notifiesOnChange(ServiceReference serviceReference, String statusVariableId) {
         return osgiVisitor.getService(serviceReference).notifiesOnChange(statusVariableId);
     }
 
@@ -346,7 +346,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *          if points to a
      *          non-existing <code>StatusVariable</code>
      */
-    public boolean resetStatusVariable(ServiceReference serviceReference, String statusVariableId) {
+    boolean resetStatusVariable(ServiceReference serviceReference, String statusVariableId) {
         return osgiVisitor.getService(serviceReference).resetStatusVariable(statusVariableId);
     }
 
@@ -366,7 +366,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
     /**
      * Cancel all jobs and clear the list
      */
-    public void cancelAllJobs() {
+    void cancelAllJobs() {
         logVisitor.debug("ENTRY: cancelJobs", null);
         try {
             if (!jobs.isEmpty()) {
@@ -431,7 +431,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      * @param on     <code>false</code> if event sending should be switched off,
      *               <code>true</code> if it should be switched on for the given path
      */
-    public void switchEvents(Set<String> paths, boolean on) {
+    void switchEvents(Set<String> paths, boolean on) {
         if (on) {
             disabledPaths.removeAll(paths);
         } else {
@@ -468,7 +468,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      *          is <code>null</code> or otherwise invalid, or points to a
      *          non-existing <code>Monitorable</code>
      */
-    public String[] getStatusVariableNames(String monitorableId) {
+    String[] getStatusVariableNames(String monitorableId) {
         Monitorable monitorable = findMonitorableById(monitorableId);
         String[] statusVariableNames = monitorable.getStatusVariableNames();
 
@@ -495,8 +495,7 @@ public class MonitorAdminCommon implements MonitorListener, MonitoringJobVisitor
      * @param id id
      * @return <code>false</code> - id is invalid, otherwise - <code>true</code>
      */
-    public static boolean isValidId(String id) {
-
+    private static boolean isValidId(String id) {
         byte[] nameBytes;
         try {
             nameBytes = id.getBytes("UTF-8");

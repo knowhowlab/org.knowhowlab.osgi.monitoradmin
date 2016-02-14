@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Monitor Admin activator
@@ -40,7 +40,7 @@ public class Activator implements BundleActivator, OsgiVisitor, LogVisitor {
     /**
      * Default logger
      */
-    private static final Logger LOG = Logger.getLogger(Activator.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(Activator.class);
 
     /**
      * <code>MonitorAdmin</code> <code>ServiceFactory</code> instance
@@ -143,7 +143,7 @@ public class Activator implements BundleActivator, OsgiVisitor, LogVisitor {
         if (logService != null) {
             logService.log(LogService.LOG_DEBUG, message, throwable);
         } else {
-            LOG.log(Level.FINE, message, throwable);
+            LOG.debug(message, throwable);
         }
     }
 
@@ -158,7 +158,7 @@ public class Activator implements BundleActivator, OsgiVisitor, LogVisitor {
         if (logService != null) {
             logService.log(LogService.LOG_INFO, message, throwable);
         } else {
-            LOG.log(Level.INFO, message, throwable);
+            LOG.info(message, throwable);
         }
     }
 
@@ -173,7 +173,7 @@ public class Activator implements BundleActivator, OsgiVisitor, LogVisitor {
         if (logService != null) {
             logService.log(LogService.LOG_WARNING, message, throwable);
         } else {
-            LOG.log(Level.WARNING, message, throwable);
+            LOG.warn(message, throwable);
         }
     }
 
@@ -188,7 +188,7 @@ public class Activator implements BundleActivator, OsgiVisitor, LogVisitor {
         if (logService != null) {
             logService.log(LogService.LOG_ERROR, message, throwable);
         } else {
-            LOG.log(Level.SEVERE, message, throwable);
+            LOG.error(message, throwable);
         }
     }
 

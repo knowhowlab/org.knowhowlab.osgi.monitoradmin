@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +25,27 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.String.format;
+
 /**
  * Abstract MonitoringJob
  *
  * @author dmytro.pishchukhin
  */
 public abstract class AbstractMonitoringJob implements MonitoringJob {
-    protected MonitoringJobVisitor visitor;
-    protected LogVisitor logVisitor;
+    MonitoringJobVisitor visitor;
+    LogVisitor logVisitor;
     // job initiator
     private String initiator;
     // list of monitoring StatusVariables
-    protected Set<String> statusVariablePaths = new HashSet<String>();
+    Set<String> statusVariablePaths = new HashSet<String>();
     // job state
-    protected boolean isRunning;
-    protected int schedule = 0;
-    protected int count = 0;
+    boolean isRunning;
+    int schedule = 0;
+    int count = 0;
 
-    protected AbstractMonitoringJob(MonitoringJobVisitor visitor, LogVisitor logVisitor, String initiator,
-                                    String[] statusVariablePaths, int schedule, int count) {
+    AbstractMonitoringJob(MonitoringJobVisitor visitor, LogVisitor logVisitor, String initiator,
+                          String[] statusVariablePaths, int schedule, int count) {
         this.visitor = visitor;
         this.logVisitor = logVisitor;
         this.initiator = initiator;
@@ -53,8 +55,8 @@ public abstract class AbstractMonitoringJob implements MonitoringJob {
         this.isRunning = true;
     }
 
-    protected AbstractMonitoringJob(MonitoringJobVisitor visitor, LogVisitor logVisitor, String initiator,
-                                    String[] statusVariablePaths, int count) {
+    AbstractMonitoringJob(MonitoringJobVisitor visitor, LogVisitor logVisitor, String initiator,
+                          String[] statusVariablePaths, int count) {
         this.visitor = visitor;
         this.logVisitor = logVisitor;
         this.initiator = initiator;
@@ -117,13 +119,7 @@ public abstract class AbstractMonitoringJob implements MonitoringJob {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append("{initiator='").append(initiator).append('\'');
-        sb.append(", statusVariablePaths=").append(statusVariablePaths);
-        sb.append(", schedule=").append(schedule);
-        sb.append(", count=").append(count);
-        sb.append('}');
-        return sb.toString();
+        return format("%s{{initiator='%s', statusVariablePaths=%s, schedule=%s, count=%s}",
+            getClass().getSimpleName(), initiator, statusVariablePaths, schedule, count);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,9 +54,9 @@ public class MonitorAdminImplSecurityTest {
 
     private Bundle createMockBundle(Permission... permisions) {
         if (permisions == null || permisions.length == 0) {
-            return new SecutiryMockBundle(new AllPermission());
+            return new SecurityMockBundle(new AllPermission());
         } else {
-            return new SecutiryMockBundle(permisions);
+            return new SecurityMockBundle(permisions);
         }
     }
 

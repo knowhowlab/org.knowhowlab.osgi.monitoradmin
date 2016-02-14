@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,25 +22,25 @@ package org.knowhowlab.osgi.monitoradmin;
  *
  * @author dmytro.pishchukhin
  */
-public interface ConstantsMonitorAdmin {
+interface ConstantsMonitorAdmin {
     /**
      * <code>MonitorAdmin</code> events topic
      */
-    public final static String TOPIC = "org/osgi/service/monitor";
+    String TOPIC = "org/osgi/service/monitor";
     /**
      * <code>Monitorable</code> ID
      */
-    public final static String MON_MONITORABLE_PID = "mon.monitorable.pid";
+    String MON_MONITORABLE_PID = "mon.monitorable.pid";
     /**
      * <code>StatusVariable</code> name
      */
-    public final static String MON_STATUSVARIABLE_NAME = "mon.statusvariable.name";
+    String MON_STATUSVARIABLE_NAME = "mon.statusvariable.name";
     /**
      * <code>StatusVariable</code> value
      */
-    public final static String MON_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
+    String MON_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
     /**
      * Initiator
      */
-    public final static String MON_LISTENER_ID = "mon.listener.id";
+    String MON_LISTENER_ID = "mon.listener.id";
 }

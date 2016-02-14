@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+  ~ Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -82,6 +82,12 @@
             <version>4.2.0</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -134,7 +140,8 @@
                     <instructions>
                         <Export-Package/>
                         <Import-Package>
-                            org.osgi*
+                            org.osgi*,
+                            org.slf4j*
                         </Import-Package>
                         <Bundle-Activator>org.knowhowlab.osgi.monitoradmin.Activator</Bundle-Activator>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true

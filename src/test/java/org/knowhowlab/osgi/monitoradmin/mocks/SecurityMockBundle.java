@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,37 +18,39 @@
 package org.knowhowlab.osgi.monitoradmin.mocks;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Version;
 import org.springframework.osgi.mock.MockBundle;
 
 import java.security.Permission;
 import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * @author dpishchukhin
  */
-public class SecutiryMockBundle extends MockBundle {
+public class SecurityMockBundle extends MockBundle {
     private Permission[] permissions;
 
-    public SecutiryMockBundle() {
+    public SecurityMockBundle() {
     }
 
-    public SecutiryMockBundle(Permission... permissions) {
+    public SecurityMockBundle(Permission... permissions) {
         this.permissions = permissions;
     }
 
-    public SecutiryMockBundle(Dictionary headers) {
+    public SecurityMockBundle(Dictionary headers) {
         super(headers);
     }
 
-    public SecutiryMockBundle(BundleContext context) {
+    public SecurityMockBundle(BundleContext context) {
         super(context);
     }
 
-    public SecutiryMockBundle(String symName) {
+    public SecurityMockBundle(String symName) {
         super(symName);
     }
 
-    public SecutiryMockBundle(String symName, Dictionary headers, BundleContext context) {
+    public SecurityMockBundle(String symName, Dictionary headers, BundleContext context) {
         super(symName, headers, context);
     }
 
@@ -64,5 +66,15 @@ public class SecutiryMockBundle extends MockBundle {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Map getSignerCertificates(int i) {
+        return null;
+    }
+
+    @Override
+    public Version getVersion() {
+        return null;
     }
 }

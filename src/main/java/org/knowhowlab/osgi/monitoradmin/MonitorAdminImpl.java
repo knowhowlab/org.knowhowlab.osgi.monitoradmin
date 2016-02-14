@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author dmytro.pishchukhin
  */
-public class MonitorAdminImpl implements MonitorAdmin {
+class MonitorAdminImpl implements MonitorAdmin {
     private static final String STARTJOB_PERMISSION_PATTERN = String.format("%s:%%d", MonitorPermission.STARTJOB);
 
     private final LogVisitor logVisitor;
@@ -47,7 +47,7 @@ public class MonitorAdminImpl implements MonitorAdmin {
      * @param common     commons actions
      * @param consumer   bundle-consumer
      */
-    public MonitorAdminImpl(LogVisitor logVisitor, MonitorAdminCommon common, Bundle consumer) {
+    MonitorAdminImpl(LogVisitor logVisitor, MonitorAdminCommon common, Bundle consumer) {
         this.logVisitor = logVisitor;
         this.common = common;
         this.consumer = consumer;
@@ -208,7 +208,7 @@ public class MonitorAdminImpl implements MonitorAdmin {
         if (bundle != null) {
             for (String variableName : variableNames) {
                 try {
-                    if (bundle.hasPermission(new MonitorPermission(String.format(MonitorAdminCommon.PATH_PATERN, pid, variableName), permissionAction))) {
+                    if (bundle.hasPermission(new MonitorPermission(String.format(MonitorAdminCommon.PATH_PATTERN, pid, variableName), permissionAction))) {
                         result.add(variableName);
                     }
                 } catch (IllegalArgumentException e) {
@@ -422,7 +422,7 @@ public class MonitorAdminImpl implements MonitorAdmin {
                     if (filter.match(pid, statusVariableName)) {
                         checkPermissions(new StatusVariablePath(pid, statusVariableName), monitorableReference,
                                 MonitorPermission.PUBLISH, MonitorPermission.SWITCHEVENTS);
-                        paths.add(String.format(MonitorAdminCommon.PATH_PATERN, pid, statusVariableName));
+                        paths.add(String.format(MonitorAdminCommon.PATH_PATTERN, pid, statusVariableName));
                     }
                 }
             }

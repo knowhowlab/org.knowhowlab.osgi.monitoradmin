@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Dmytro Pishchukhin (http://knowhowlab.org)
+ * Copyright (c) 2009-2016 Dmytro Pishchukhin (http://knowhowlab.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import org.osgi.framework.ServiceRegistration;
  *
  * @author dpishchukhin
  */
-public class MonitorAdminFactory implements ServiceFactory {
+class MonitorAdminFactory implements ServiceFactory {
     private final LogVisitor logVisitor;
     private final MonitorAdminCommon common;
 
-    public MonitorAdminFactory(LogVisitor logVisitor, MonitorAdminCommon common) {
+    MonitorAdminFactory(LogVisitor logVisitor, MonitorAdminCommon common) {
         this.logVisitor = logVisitor;
         this.common = common;
     }
