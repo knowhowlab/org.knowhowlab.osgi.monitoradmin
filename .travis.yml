@@ -1,6 +1,8 @@
 language: java
-install: mvn --quiet install
-test: mvn --quiet install -P it
+install:
+  - mvn --quiet install
+  - mvn --quiet -DskipTests=true integration-test -P it
+script: mvn verify
 jdk:
   - openjdk6
   - oraclejdk7
