@@ -9,6 +9,8 @@ org.knowhowlab.osgi.monitoradmin
 [![Coverage Status](https://coveralls.io/repos/github/knowhowlab/org.knowhowlab.osgi.monitoradmin/badge.svg?branch=master)](https://coveralls.io/github/knowhowlab/org.knowhowlab.osgi.monitoradmin?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.knowhowlab.osgi/monitoradmin/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/org.knowhowlab.osgi/monitoradmin/)
 
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/dimi)
+
 ## Release Notes
 
 # 1.0.3
